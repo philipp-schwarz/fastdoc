@@ -1,0 +1,24 @@
+{
+  "name": "fastdoc",
+  "version": "1.0.0",
+  "description": "Fast markdown documentation generator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philipp-schwarz/fastdoc.git"
+  },
+  "keywords": [
+    "documentation",
+    "generator",
+    "markdown",
+    "toc"
+  ],
+  "bin": {
+    "bower": "bin/fastdoc"
+  },
+  "author": "Philipp Schwarz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/philipp-schwarz/fastdoc/issues"
+  },
+  "homepage": "https://github.com/philipp-schwarz/fastdoc#readme"
+}

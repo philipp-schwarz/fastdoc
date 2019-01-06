@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+
+// Name this process for task manager and system
+process.bin = process.title = 'fastdoc';
+
+// Load everything we need
+const fs = require('fs')
+
+// Files to be processed
+let inData = [];
+
+// Save to path or directory
+let outPath = '';
+let outIsDir = false;
+
+// Process all cli arguments
+for (let i=2; i<process.argv.length; i++) {
+
+	// Current and next argument
+	let cur = process.argv[i];
+	let next = process.argv[i+1];
+
+	// Parameters and options
+	if (cur[0] == '-') {
+		
+		// Output
+		if ((cur == '-o' || cur == '--output') && next) {
+			outPath = next;
+
+			if (fs.existsSync(outPath)) {
+				outIsDir = fs.lstatSync(outPath).isDirectory();
+			}
+			i++;
+		}
+	}
+
+	// Every other parameter is expected to be a file
+	else {
+
+		// Path not found
+		if (!fs.existsSync(cur)) {
+			console.error('File not found: '+cur+"\n");
+			process.exit();
+		}
+
+		// Read file content
+		inData.push({
+			path: cur,
+			data: fs.readFileSync(cur)+''
+		});
+	}
+}
+
+// Process data
+for (let i=0; i<inData.length; i++) {
+	let data = inData[i].data;
+
+	// Single ĺine C style
+	data = data.replace(/\/\/[ ]?(.*?)[ ]*\/\/doc/g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+	data = data.replace(/\/\/doc\/\/[ ]?(.*)/g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+
+	// Multiline C style
+	data = data.replace(/[ \n]*\/\*([\s\S]*?)\*doc\*\//g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+	data = data.replace(/[ \n]*\/\*doc\*([\s\S]*?)\*\//g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+
+	// Single line bash style
+	data = data.replace(/#[ ]?(.*?)[ ]*#doc/g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+	data = data.replace(/#doc#[ ]?(.*)/g, '{{{DOCSTART}}}$1{{{DOCEND}}}');
+
+	// Mark list
+	let list = data.match(/[ \t]*\{\{\{DOCSTART\}\}\}([\s\S]*?)\{\{\{DOCEND\}\}\}/g);
+	for (let j=0; j<list.length; j++) {
+
+		// Current mark
+		let mark = list[j];
+
+		// Count leading spaces
+		let spaceString = '';
+		let match = mark.match(/^[ \t]+/);
+		if (match)
+			spaceString = match[0];
+
+		// Reindent lines by leading spaces
+		mark = mark.split("\n"+spaceString).join("\n");
+		if (mark.startsWith(spaceString))
+			mark = mark.substr(spaceString.length);
+
+		// Remove doc marker
+		mark = mark.replace(/\{\{\{DOC(START|END)\}\}\}/g, '');
+
+		// Manage new lines at beginning and end
+		mark = mark.replace(/^([ \t]*\n)*/, '');
+		mark = mark.replace(/[ \t\n]*$/, '');
+		mark += "\n\n";
+
+		// Save changes to list
+		list[j] = mark;
+	}
+
+	inData[i].out = list.join('');
+}
+
+// Save files, one per input file
+if (outIsDir) {
+	for (let i=0; i<inData.length; i++) {
+		let filename = inData[i].path.split('/').pop().replace(/\.[^.]+$/, '')+'.md';
+		let path = outPath+'/'+filename;
+		console.log(path);
+		fs.writeFileSync(path, inData[i].out);
+	}
+}
+
+// Save single file
+else {
+	let content = '';
+	for (let i=0; i<inData.length; i++) {
+		content += inData[i].out;
+	}
+	console.log(outPath);
+	fs.writeFileSync(outPath, content);
+}
