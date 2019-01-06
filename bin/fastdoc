@@ -69,6 +69,8 @@ for (let i=0; i<inData.length; i++) {
 
 	// Mark list
 	let list = data.match(/[ \t]*\{\{\{DOCSTART\}\}\}([\s\S]*?)\{\{\{DOCEND\}\}\}/g);
+	if (!list)
+		list = [];
 	for (let j=0; j<list.length; j++) {
 
 		// Current mark
@@ -100,8 +102,17 @@ for (let i=0; i<inData.length; i++) {
 	inData[i].out = list.join('');
 }
 
+// Output to stdout
+if (!outPath) {
+	let content = '';
+	for (let i=0; i<inData.length; i++) {
+		content += inData[i].out;
+	}
+	console.log(content);
+}
+
 // Save files, one per input file
-if (outIsDir) {
+else if (outIsDir) {
 	for (let i=0; i<inData.length; i++) {
 		let filename = inData[i].path.split('/').pop().replace(/\.[^.]+$/, '')+'.md';
 		let path = outPath+'/'+filename;
