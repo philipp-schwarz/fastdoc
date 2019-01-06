@@ -51,7 +51,7 @@ Does the world need another fancy documentation generator? No, not really. But I
 
 I wanted something that is no effort to learn and use. Written in 100 lines of code alongside with 100 words of documentation.
 
-## Wy is Fastdoc not documented with Fastdoc?
+## Why is Fastdoc not documented with Fastdoc?
 
 Fastdoc is made for big projects, but Fastdoc itself is not a big project.
 

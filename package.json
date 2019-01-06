@@ -1,6 +1,6 @@
 {
   "name": "fastdoc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast markdown documentation generator",
   "repository": {
     "type": "git",
@@ -12,9 +12,7 @@
     "markdown",
     "toc"
   ],
-  "bin": {
-    "bower": "bin/fastdoc"
-  },
+  "bin": "bin/fastdoc",
   "author": "Philipp Schwarz",
   "license": "MIT",
   "bugs": {
