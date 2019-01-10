@@ -2,8 +2,6 @@
 
 ## Description
 
-**Fastdoc is in a very early beta phase and highly experimental.**
-
 Fastdoc lets you write your code documentation using text or markdown directly in your code.
 It finds and extracts all snippets and joins them to markdown files (.md).
 
