@@ -75,8 +75,8 @@ Parse two files to a file
 
 Parse a folder to a file
 
-	fastdoc src/ --output README.md
+	fastdoc src/*.js --output README.md
 
 Parse a folder to a folder. There will be one markdown file (.md) for every matching code file.
 
-	fastdoc src/ --output documentation/
+	fastdoc src/*.js --output documentation/

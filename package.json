@@ -1,7 +1,7 @@
 {
   "name": "fastdoc",
-  "version": "1.0.4",
-  "description": "Fast markdown documentation generator",
+  "version": "1.0.5",
+  "description": "Easy to use markdown documentation generator",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/philipp-schwarz/fastdoc.git"
