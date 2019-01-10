@@ -13,6 +13,40 @@ let inData = [];
 let outPath = '';
 let outIsDir = false;
 
+// Table of contents parser
+function parseToc(content) {
+	
+	// List all markdown headlines
+	let headList = content.match(/(^|\n)#[^\n]+/g);
+
+	// Make five tocs for different headline depths
+	let toc = ['', '', '', '', ''];
+	for (let i=0; i<headList.length; i++) {
+
+		// Make a link from depth, label and target
+		let str = headList[i].trim();
+		let depth = str.match(/^#+/)[0].length;
+		let label = str.replace(/^[# ]*/, '').replace(/[\[\]]/g, '');
+		let target = str.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim().replace(/\s+/g, '-');
+		let link = '    '.repeat(depth-1)+'- ['+label+'](#'+target+')';
+
+		// Add the link to matching tocs
+		for (let j=depth-1; j<5; j++) {
+			if (toc[j])
+				toc[j] += "\n";
+			toc[j] += link;
+		}
+	}
+
+	// Add tocs to the content
+	for (let i=0; i<5; i++) {
+		content = content.replace('{fastdoc-toc-'+(i+1)+'}', toc[i]);
+	}
+	content = content.replace('{fastdoc-toc}', toc[4]);
+
+	return content;
+}
+
 // Process all cli arguments
 for (let i=2; i<process.argv.length; i++) {
 
@@ -108,7 +142,7 @@ if (!outPath) {
 	for (let i=0; i<inData.length; i++) {
 		content += inData[i].out;
 	}
-	console.log(content);
+	console.log(parseToc(content));
 }
 
 // Save files, one per input file
@@ -117,7 +151,7 @@ else if (outIsDir) {
 		let filename = inData[i].path.split('/').pop().replace(/\.[^.]+$/, '')+'.md';
 		let path = outPath+'/'+filename;
 		console.log(path);
-		fs.writeFileSync(path, inData[i].out);
+		fs.writeFileSync(path, parseToc(inData[i].out));
 	}
 }
 
@@ -128,5 +162,5 @@ else {
 		content += inData[i].out;
 	}
 	console.log(outPath);
-	fs.writeFileSync(outPath, content);
+	fs.writeFileSync(outPath, parseToc(content));
 }

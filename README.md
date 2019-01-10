@@ -7,6 +7,10 @@
 Fastdoc lets you write your code documentation using text or markdown directly in your code.
 It finds and extracts all snippets and joins them to markdown files (.md).
 
+✓ Made for Github and npm  
+✓ Table of contents generator  
+✓ Easy to learn and use
+
 ## Installation
 
 	npm install -g fastdoc
@@ -42,6 +46,16 @@ Just add "doc" to your comment syntax, before or after the comment.
 	#doc# Single line comment
 
 	# Single line comment #doc
+
+## Table of contents
+
+Fastdoc generates a Github friendly table of contents. Just place this inside your comment:
+
+	{fastdoc-toc}
+
+If you just want to list main headlines, you can set the depth (1-5):
+
+	{fastdoc-toc-3}
 
 # Appendix
 
