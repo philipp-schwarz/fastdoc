@@ -15,7 +15,7 @@ It finds and extracts all snippets and joins them to markdown files (.md).
 
 ## Usage
 
-	fastdoc [OPTIONS] [INPUT FILES] [--output FILE/DIR]
+	fastdoc [INPUT FILES] [--output FILE/DIR]
 
 Parse one file to stdout
 

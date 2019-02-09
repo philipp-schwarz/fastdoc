@@ -47,6 +47,13 @@ function parseToc(content) {
 	return content;
 }
 
+// Show usage when called without arguments
+if (process.argv.length <= 2) {
+	console.error('No arguments found.');
+	console.error('Usage: https://www.npmjs.com/package/fastdoc');
+	process.exit();
+}
+
 // Process all cli arguments
 for (let i=2; i<process.argv.length; i++) {
 
