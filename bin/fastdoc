@@ -18,6 +18,8 @@ function parseToc(content) {
 	
 	// List all markdown headlines
 	let headList = content.match(/(^|\n)#[^\n]+/g);
+	if (!headList)
+		headList = [];
 
 	// Make five tocs for different headline depths
 	let toc = ['', '', '', '', ''];
